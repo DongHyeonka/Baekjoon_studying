@@ -4,7 +4,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
 --백준 프젝 생성일 2024-03-07 --
 
 2024-03-07
-- 숫자합 구하기
+- 숫자합 구하기 -
 시간제한 : 1초, 난이도 : 브론즈4, 백준 11720번
 
 입력 : N개의 숫자가 공백없이 쓰여 있다. 이 숫자를 모두 합해서 출력
