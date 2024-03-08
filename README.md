@@ -13,7 +13,7 @@ This is an auto push repository for Baekjoon Online Judge created with [Baekjoon
   - N의 범위가 1부터 100까지 이기 때문에 int, long과 같은 숫자형으로 담을 수 없다. 
     그래서 문자열로 입력을 받은 다음 이를 문자 배열로 변환하고 문자 배열값을 순서대로 읽으면서 숫자형으로 변환해서 더하기
 
-2024-03-07
+2024-03-08
 - 평균 구하기
   - 시간 제한 : 2초, 난이도 : 브론지1, 백준 : 1546번
  
