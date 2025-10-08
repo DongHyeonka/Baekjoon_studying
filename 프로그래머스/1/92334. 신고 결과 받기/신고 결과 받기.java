@@ -1,58 +1,48 @@
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 class Solution {
     public int[] solution(String[] id_list, String[] report, int k) {
         int n = id_list.length;
         
-        //1. 이름을 인덱스로 맵핑
-        Map<String, Integer> id_map = new HashMap<>();
+        Map<String, Integer> idToIndex = new HashMap<>();
+        int[] answer = new int[n];
+        
         for(int i = 0; i < n; i++) {
-            id_map.put(id_list[i], i);
+            idToIndex.put(id_list[i], i);// 이 시점에서 id에 대한 인덱싱화 진행
         }
         
-        int report_count = report.length;
+        Map<String, HashSet<String>> record = new HashMap<>();
         
-        // 신고 기록을 중복제거를 위해서 0 또는 1만 저장
-        int[][] reportRecord = new int[n][n];
+        for(String id : id_list) {
+            record.put(id, new HashSet<>());   
+        }
         
-        for(int i = 0; i < report_count; i++) {
-            String[] parts = report[i].split(" ");
-            int reporter = id_map.get(parts[0]);
-            int reported = id_map.get(parts[1]);
+        for(String re : report) {
+            String[] parts = re.split(" ");
+            String from = parts[0];
+            String to = parts[1];
             
-            reportRecord[reporter][reported] = 1;
+            int fromToIndex = idToIndex.get(from);
+            int toToIndex = idToIndex.get(to);
+            
+            record.get(to).add(from); // 시작부터 value의 값도 중복을 방지 하기에 동일한 키와 동일한 value가 못들어감
         }
         
-        int[] reported_count = new int[n];
-        
-        //각 사용자가 받은 신고 횟수 저장
-        for(int j = 0; j < n; j++) { // 신고 받는 사람
-            for(int i = 0; i < n; i++) { // 주체가 안에 신고자
-                reported_count[j] += reportRecord[i][j];
+        for(String id : id_list) {
+            HashSet<String> reporters = record.get(id);
+            
+            if(reporters.size() >= k) {
+                for(String reporter : reporters) {
+                    answer[idToIndex.get(reporter)]++;
+                }
             }
-        }
-        
-        // K번 이상 신고를 받으면 정지 -> 이메일 보내기위한 검증
-        boolean[] suspend = new boolean[n];
-        for(int i = 0; i < n; i++) {
-            if(reported_count[i] >= k) {
-                suspend[i] = true;
-            }
-        }
-        
-        int[] answer = new int[n]; // 이메일 카운트 계산
-        
-        for (int i = 0; i < n; i++) {// 신고자에게 메일을 카운트해야되기에 
-            for(int j = 0; j < n; j++) {
-                if(reportRecord[i][j] == 1 && suspend[j]) {
-                    answer[i]++;
-                }   
-            }   
         }
         
         return answer;
     }
 }
+// 각 유저는 한 번에 한명의 유저만 신고할 수 있다.
+// 신고 횟수 제한은 없다. -> 다른 유저를 계속해서 신고할 수 있다.
+// 한 유저를 여러번 신고할 수 있지만 동일한 유저에 대해서는 1번만 신고 처리됨
+// 다른 유저의 신고로 인해 특정 이상 신고를 먹으면 이메일 발송됨
+// 
